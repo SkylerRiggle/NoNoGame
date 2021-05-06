@@ -1,0 +1,221 @@
+.root {
+  border-color: black;
+  empty-color: #FBE7C6;
+  filled-color: #FF7077;
+  off-filled-color: #ff515a;
+  marked-color: #04ECF0;
+  hover-color: #ACEEF3;
+  unsolved-background-color: #f9d9a4;
+  unsolved-text-color: border-color;
+  solved-background-color: off-filled-color;
+  solved-text-color: white;
+}
+
+
+/*Nonogram ------------------------------------------------------------------------------------------------------------------------------- */
+.nonogram-view {
+  -fx-background-color: empty-color;
+  -fx-border-color: border-color;
+  -fx-border-width: 1 1 1 1;
+}
+
+.nonogram-view-solved {
+  -fx-background-color: filled-color;
+}
+
+
+/*Clue View ------------------------------------------------------------------------------------------------------------------------------- */
+.row-clues-view {}
+.col-clues-view {}
+.row-clue-view {}
+.col-clue-view {}
+
+.clue-view > Text {
+  -fx-font-family: sans-serif;
+  -fx-stroke-width: 0;
+}
+
+.clue-view-unsolved > Rectangle {
+  -fx-fill: empty-color;
+}
+
+.clue-view-unsolved > Text {
+  -fx-fill: unsolved-text-color;
+}
+
+.clue-view-solved > Rectangle {
+  -fx-fill: solved-background-color;
+}
+
+.clue-view-solved > Text {
+  -fx-fill: solved-text-color;
+}
+
+.clue-view-unsolved-dark > Rectangle {
+  -fx-fill: unsolved-background-color;
+}
+
+.clue-view-unsolved-dark > Text {
+  -fx-fill: unsolved-text-color;
+}
+
+.clue-view-solved-dark > Rectangle {
+  -fx-fill: off-filled-color;
+}
+
+.clue-view-solved-dark > Text {
+  -fx-fill: solved-text-color;
+}
+
+
+/*GUI Elements ------------------------------------------------------------------------------------------------------------------------------- */
+.button {
+	-fx-font: 20px "Monospace";
+	-fx-font-weight: bold;
+	-fx-text-fill: solved-text-color;
+	
+	-fx-background-color: filled-color;
+	-fx-background-insets: 0, 2;
+	-fx-background-radius: 12;
+	
+	-fx-border-width: 6;
+	-fx-border-color: hover-color;
+	-fx-border-radius: 6;
+}
+
+.button:hover {
+	-fx-border-color: marked-color;
+}
+
+.label {
+	-fx-font: 12px "Monospace";
+	-fx-font-weight: bold;
+	-fx-text-fill: border-color;
+}
+
+.combo-box {
+	-fx-font: 16px "Monospace";
+	-fx-font-weight: bold;
+	
+	-fx-background-color: filled-color;
+}
+
+.combo-box .list-cell {
+	-fx-text-fill: solved-text-color;
+	-fx-background-color: off-filled-color;
+}
+
+.combo-box .list-cell:hover {
+	-fx-background-color: filled-color;
+}
+
+
+/*Game Menus ------------------------------------------------------------------------------------------------------------------------------- */
+MainMenu {
+	-fx-background-color: empty-color;
+}
+
+PlayOptions {
+	-fx-background-color: empty-color;
+}
+
+CreateOptions {
+	-fx-background-color: empty-color;
+}
+
+SaveBox {
+	-fx-background-color: empty-color;
+}
+
+HBox {
+	-fx-background-color: empty-color;
+}
+
+.HBox-filled {
+	-fx-background-color: filled-color;
+}
+
+
+/*Cell View ------------------------------------------------------------------------------------------------------------------------------- */
+.cell-grid-view {
+  -fx-border-color: border-color;
+  -fx-border-width: 1 0 0 1;
+}
+
+.cell-view > Rectangle {
+  -fx-stroke: border-color;
+  -fx-stroke-type: inside;
+  -fx-stroke-width: 1;
+}
+
+.cell-view:hover > Rectangle {
+  -fx-stroke: hover-color;
+  -fx-stroke-width: 2;
+}
+
+.cell-view > Line {
+  visibility: hidden;
+  -fx-stroke: marked-color;
+  -fx-stroke-width: 2;
+  -fx-stroke-line-cap: round;
+  -fx-stroke-type: outside;
+}
+
+.cell-view-empty > Rectangle {
+  -fx-fill: empty-color;
+}
+
+.cell-view-filled > Rectangle {
+  -fx-fill: filled-color;
+}
+
+.cell-view-marked > Rectangle {
+  -fx-fill: empty-color;
+}
+
+.cell-view-marked > Line {
+  visibility: visible;
+}
+
+
+/*Alerts ------------------------------------------------------------------------------------------------------------------------------- */
+.dialog-pane {
+    -fx-background-color: off-filled-color;
+    -fx-padding: 0;
+}
+
+.dialog-pane > .expandable-content {
+    -fx-padding: 8px;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-padding: 10px;
+}
+
+.dialog-pane > .content.label {
+    -fx-alignment: top-left;
+    -fx-padding: 16px 10px 0 10px;
+}
+
+.dialog-pane > .content {
+    -fx-padding: 10px;
+}
+
+.dialog-pane:no-header .graphic-container {
+    -fx-padding: 10px 0 0 10px;
+}
+
+.dialog-pane:header .header-panel {
+    -fx-padding: 10px;
+    -fx-background-color: empty-color;
+    -fx-background-insets: 0, 0 0 1 0;
+}
+
+.dialog-pane:header .header-panel .label {
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+.dialog-pane:header .header-panel .graphic-container {
+    -fx-padding: 0 0 0 10px;
+}
