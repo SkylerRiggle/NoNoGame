@@ -40,6 +40,13 @@ public class RowCluesView extends VBox {
 		rowClueViews.get(rowIdx).setState(solved);
 	}
 	
+	/**
+	 * This method checks if the row clue at a certain index is at an even index, and
+	 * if so, returns that it should be dark.
+	 * 
+	 * @param counter The index value of the row clue.
+	 * @return The dark state for the row clue.
+	 */
 	private boolean isDark(int counter) {
 		if (counter % 2 == 0) {
 			return true;

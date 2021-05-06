@@ -26,7 +26,7 @@ public class ClueView extends StackPane {
 
 	/**
 	 * This constructor calls the constructor with the parameters
-	 * (String, int). with the side length passed and an empty string.
+	 * (String, integer). with the side length passed and an empty string.
 	 * 
 	 * @param sideLength The side length of the view.
 	 */
@@ -36,7 +36,7 @@ public class ClueView extends StackPane {
 
 	/**
 	 * This constructor calls the constructor with the parameters
-	 * (String, int). with the side length passed and an a string 
+	 * (String, integer). with the side length passed and an a string 
 	 * representation of the integer clue.
 	 * 
 	 * @param clue The clue integer value.

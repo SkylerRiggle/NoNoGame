@@ -44,6 +44,13 @@ public class ColCluesView extends HBox {
 		colClueViews.get(colIdx).setState(solved);
 	}
 	
+	/**
+	 * This method checks if the column clue at a certain index is at an even index, and
+	 * if so, returns that it should be dark.
+	 * 
+	 * @param counter The index value of the column clue.
+	 * @return The dark state for the column clue.
+	 */
 	private boolean isDark(int counter) {
 		if (counter % 2 == 0) {
 			return true;
