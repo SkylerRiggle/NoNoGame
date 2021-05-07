@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
+ * The create model stores the game data for creating new puzzles.
  * 
  * @author Skyler Riggle
  * @version 1.0
@@ -19,6 +20,8 @@ public class CreateModel implements Model {
 	
 	
 	/**
+	 * This constructor creates a new array of boolean values that represent
+	 * the puzzle cell gird.
 	 * 
 	 * @param size The desired size of the puzzle.
 	 */
@@ -58,14 +61,18 @@ public class CreateModel implements Model {
 	}
 	
 	/**
+	 * This method returns a projection for a given boolean array. A projection is an
+	 * array of integer values representing the clusters of true values. For example,
+	 * the array [TRUE, TRUE, FALSE, TRUE, FALSE] would project to [2, 1].
 	 * 
-	 * @param states
-	 * @return
+	 * @param states The boolean values to be evaluated.
+	 * @return The projection of the given array.
 	 */
 	private List<Integer> project(boolean[] states) {
 		List<Integer> result = new ArrayList<Integer>();
 		int sum = 0;
 		
+		//Count and add the chains of true values.
 		for (boolean state : states) {
 			if (state) {
 				sum++;
@@ -75,6 +82,8 @@ public class CreateModel implements Model {
 			}
 		}
 		
+		//Handle the case where a cluster has yet to be added or
+		//no clusters were found.
 		if (result.size() == 0 || sum > 0) {
 			result.add(sum);
 		}
@@ -83,9 +92,10 @@ public class CreateModel implements Model {
 	}
 	
 	/**
+	 * This method returns the projection for a given row.
 	 * 
-	 * @param rowIdx
-	 * @return
+	 * @param rowIdx The row to be projected.
+	 * @return The projection of the row.
 	 */
 	private List<Integer> projectRow(int rowIdx) {
 		boolean[] states = new boolean[getSize()];
@@ -98,9 +108,10 @@ public class CreateModel implements Model {
 	}
 	
 	/**
+	 * This method returns the projection for a given column.
 	 * 
-	 * @param colIdx
-	 * @return
+	 * @param colIdx The column to be projected.
+	 * @return The projection of the column.
 	 */
 	private List<Integer> projectCol(int colIdx) {
 		boolean[] states = new boolean[getSize()];
@@ -113,10 +124,11 @@ public class CreateModel implements Model {
 	}
 
 	/**
+	 * This method returns the current state of a given cell.
 	 * 
-	 * @param rowIdx
-	 * @param colIdx
-	 * @return
+	 * @param rowIdx The row the cell is in.
+	 * @param colIdx The column the cell is in.
+	 * @return The state of the cell.
 	 */
 	@Override
 	public CellState getCellState(int rowIdx, int colIdx) {
@@ -130,10 +142,11 @@ public class CreateModel implements Model {
 	}
 
 	/**
+	 * This method changes the state of a given cell.
 	 * 
-	 * @param rowIdx
-	 * @param colIdx
-	 * @param state
+	 * @param rowIdx The row the cell is in.
+	 * @param colIdx The column the cell is in.
+	 * @param state The desired new state of the cell.
 	 */
 	@Override
 	public void setCellState(int rowIdx, int colIdx, CellState state) {
@@ -145,9 +158,10 @@ public class CreateModel implements Model {
 	}
 	
 	/**
+	 * This method writes the result of the toString method to a desired file.
 	 * 
-	 * @param filename
-	 * @throws IOException
+	 * @param filename The desired filename for the created puzzle.
+	 * @throws IOException Thrown in case of error while file writing.
 	 */
 	public void save(String filename) throws IOException {
 		File saveFile = new File(Main.getPuzzleLocation() + filename + Main.getPuzzleFileType());
@@ -164,15 +178,18 @@ public class CreateModel implements Model {
 	}
 	
 	/**
+	 * This method returns a string representation of the puzzle to inclue its size and clues.
 	 * 
-	 * @return
+	 * @return A string representation of the created puzzle.
 	 */
 	@Override
 	public String toString() {
 		StringJoiner result = new StringJoiner(System.lineSeparator());
 		
+		//Get the size of the grid for looping.
 		int gridSize = getSize();
 		
+		//Add the row clues to the string.
 		for (int row = 0; row < gridSize; row++) {
 			List<Integer> projection = projectRow(row);
 			StringJoiner rowString = new StringJoiner(" ");
@@ -184,6 +201,7 @@ public class CreateModel implements Model {
 			result.add(rowString.toString());
 		}
 		
+		//Add the column clues to the string.
 		for (int col = 0; col < gridSize; col++) {
 			List<Integer> projection = projectCol(col);
 			StringJoiner colString = new StringJoiner(" ");
