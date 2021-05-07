@@ -9,6 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 /**
+ * The play view displays all of the game-play elements to the player, including a cell grid, the
+ * row and column clues, and a give up button.
  * 
  * @author Skyler Riggle
  * @version 1.0
@@ -35,25 +37,29 @@ public class PlayView extends BorderPane implements View {
 	
 	
 	/**
+	 * This constructor initializes the cell gird, clues, and give up button and displays them.
 	 * 
-	 * @param rowClues
-	 * @param colClues
-	 * @param main
+	 * @param rowClues The clues for each row.
+	 * @param colClues The clues for each column.
+	 * @param main A reference to the Main class for this application.
 	 */
 	public PlayView(int[][] rowClues, int[][] colClues, Main main) {
 		super();
 		
 		this.main = main;
 		
+		//Create the grid and clue elements.
 		rowCluesView = new RowCluesView(rowClues, CELL_SIZE, max(rowClues));
 		colCluesView = new ColCluesView(colClues, CELL_SIZE, max(colClues));
 		cellGrid = new CellGridView(rowClues.length, colClues.length);
 		
 		quitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
+			//Confirm the player's action to quit.
 			public void handle(ActionEvent arg0) {
 				String message = "Are you sure you want to quit?";
 				ConfirmAlert confirmAlert = new ConfirmAlert(AlertType.CONFIRMATION, message, new EventHandler<ActionEvent>() {
+					//Display the lose alert if the player confirms.
 					@Override
 					public void handle(ActionEvent arg0) {
 						String message = "GAME OVER!";
@@ -65,21 +71,22 @@ public class PlayView extends BorderPane implements View {
 			}
 		});
 		
+		//Add the quit button to an HBox for display.
 		HBox buttonBox = new HBox(quitButton);
 		buttonBox.setAlignment(Pos.CENTER);
 		buttonBox.setPadding(new Insets(SPACING, SPACING, SPACING, SPACING));
 
+		//Set the location of each element.
 		setLeft(rowCluesView);
 		setTop(colCluesView);
 		setCenter(cellGrid);
 		setBottom(buttonBox);
-		
-		setState(false);
 	}
 	
 	/**
+	 * This method passes the presenter to the cell grid.
 	 * 
-	 * @param presenter
+	 * @param presenter The presenter used in synchronization.
 	 */
 	@Override
 	public void register(Presenter presenter) {
@@ -87,25 +94,29 @@ public class PlayView extends BorderPane implements View {
 	}
 
 	/**
+	 * This method updates the cell state of a cell in the grid.
 	 * 
-	 * @param rowIdx
-	 * @param colIdx
-	 * @param state
-	 */
+	 * @param rowIdx The row the cell is in.
+	 * @param colIdx The column the cell is in.
+	 * @param state The desired new state of the cell.
+	 */ 
 	@Override
 	public void setCellState(int rowIdx, int colIdx, CellState state) {
 		cellGrid.updateCell(rowIdx, colIdx, state);
 	}
 	
 	/**
+	 * This method updates the look of the puzzle based on its solved state.
 	 * 
-	 * @param isSolved
+	 * @param isSolved The solved state of the puzzle.
 	 */
 	public void setState(boolean isSolved) {
 		ObservableList<String> styleClasses = getStyleClass();
 		
+		//Remove the current style class.
 		styleClasses.removeAll(MODEL_STYLE, SOLVED_STYLE);
 		
+		//Add the appropriate style class.
 		if (isSolved) {
 			styleClasses.add(SOLVED_STYLE);
 		} else {
@@ -151,7 +162,7 @@ public class PlayView extends BorderPane implements View {
 	}
 	
 	/**
-	 * 
+	 * This method displays the win alert to the player.
 	 */
 	private void displayWin() {
 		if (isPlaying) {
@@ -162,9 +173,11 @@ public class PlayView extends BorderPane implements View {
 	}
 	
 	/**
+	 * This method finds the maximum length of an array contained within a two
+	 * dimensional array.
 	 * 
-	 * @param array
-	 * @return
+	 * @param array The two dimensional array being evaluated.
+	 * @return The maximum length of an array contained within a two dimensional array.
 	 */
 	private int max(int[][] array) {
 		int result = 1;
@@ -181,7 +194,7 @@ public class PlayView extends BorderPane implements View {
 	}
 	
 	/**
-	 * 
+	 * This method resets the isPlaying boolean so that the win alert will be displayed on the next win.
 	 */
 	public static void resetPlay() {
 		isPlaying = true;
