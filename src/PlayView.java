@@ -8,6 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+/**
+ * 
+ * @author Skyler Riggle
+ * @version 1.0
+ *
+ */
 public class PlayView extends BorderPane implements View {
 
 	private static final String MODEL_STYLE = "nonogram-view";
@@ -27,6 +33,13 @@ public class PlayView extends BorderPane implements View {
 	
 	private Main main;
 	
+	
+	/**
+	 * 
+	 * @param rowClues
+	 * @param colClues
+	 * @param main
+	 */
 	public PlayView(int[][] rowClues, int[][] colClues, Main main) {
 		super();
 		
@@ -64,16 +77,30 @@ public class PlayView extends BorderPane implements View {
 		setState(false);
 	}
 	
+	/**
+	 * 
+	 * @param presenter
+	 */
 	@Override
 	public void register(Presenter presenter) {
 		cellGrid.register(presenter);
 	}
 
+	/**
+	 * 
+	 * @param rowIdx
+	 * @param colIdx
+	 * @param state
+	 */
 	@Override
 	public void setCellState(int rowIdx, int colIdx, CellState state) {
 		cellGrid.updateCell(rowIdx, colIdx, state);
 	}
 	
+	/**
+	 * 
+	 * @param isSolved
+	 */
 	public void setState(boolean isSolved) {
 		ObservableList<String> styleClasses = getStyleClass();
 		
@@ -86,6 +113,12 @@ public class PlayView extends BorderPane implements View {
 		}
 	}
 	
+	/**
+	 * This method updates a given rows solved state.
+	 * 
+	 * @param rowIdx The row to be updated.
+	 * @param solved The new solved state of the row.
+	 */
 	public void setRowClueState(int rowIdx, boolean solved) {
 		rowCluesView.setRowState(rowIdx, solved);
 	}
@@ -117,6 +150,9 @@ public class PlayView extends BorderPane implements View {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	private void displayWin() {
 		if (isPlaying) {
 			WinAlert winAlert = new WinAlert(AlertType.CONFIRMATION, "YOU WIN!!!", main);
@@ -125,6 +161,11 @@ public class PlayView extends BorderPane implements View {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param array
+	 * @return
+	 */
 	private int max(int[][] array) {
 		int result = 1;
 		
@@ -139,6 +180,9 @@ public class PlayView extends BorderPane implements View {
 		return result;
 	}
 	
+	/**
+	 * 
+	 */
 	public static void resetPlay() {
 		isPlaying = true;
 	}

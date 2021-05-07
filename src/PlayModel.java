@@ -8,6 +8,12 @@ import java.util.Scanner;
 
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * 
+ * @author Skyler Riggle
+ * @version 1.0
+ *
+ */
 public class PlayModel implements Model {
 
 	private static final int RANDOM_UPPER = 1000;
@@ -19,6 +25,10 @@ public class PlayModel implements Model {
 	
 	private static long startTime;
 	
+	
+	/**
+	 * 
+	 */
 	public PlayModel() {
 		Random random = new Random();
 		
@@ -33,6 +43,14 @@ public class PlayModel implements Model {
 		startTime = System.currentTimeMillis();
 	}
 
+	
+	/**
+	 * 
+	 * @param numRows
+	 * @param numCols
+	 * @param random
+	 * @return
+	 */
 	private CellState[][] createRandomPuzzle(int numRows, int numCols, Random random) {
 		CellState[][] solution = new CellState[numRows][numCols];
 		
@@ -52,6 +70,12 @@ public class PlayModel implements Model {
 		return solution;
 	}
 	
+	/**
+	 * 
+	 * @param numRows
+	 * @param numCols
+	 * @param solution
+	 */
 	private void decodeSolution(int numRows, int numCols, CellState[][] solution) {
 		for (int row = 0; row < numRows; row++) {
 			List<Integer> projection = project(solution[row]);
@@ -77,6 +101,10 @@ public class PlayModel implements Model {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param filename
+	 */
 	public PlayModel(String filename) {
 		File puzzleFile = new File(Main.getPuzzleLocation() + filename);
 		
@@ -129,6 +157,11 @@ public class PlayModel implements Model {
 		}
 	}
 
+	/**
+	 * 
+	 * @param numRows
+	 * @param numCols
+	 */
 	private void initializeArrays(int numRows, int numCols) {
 		cellStates = new CellState[numRows][numCols];
 		rowClues = new int[numRows][];
@@ -141,6 +174,11 @@ public class PlayModel implements Model {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param states
+	 * @return
+	 */
 	public List<Integer> project(CellState[] states) {
 		List<Integer> result = new ArrayList<Integer>();
 		int sum = 0;
@@ -161,6 +199,11 @@ public class PlayModel implements Model {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param rowIdx
+	 * @return
+	 */
 	public boolean isRowSolved(int rowIdx) {
 		int i;
 		int size = getSize();
@@ -185,6 +228,11 @@ public class PlayModel implements Model {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param colIdx
+	 * @return
+	 */
 	public boolean isColSolved(int colIdx) {
 		int i;
 		int size = getSize();
@@ -209,6 +257,10 @@ public class PlayModel implements Model {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isSolved() {
 		int size = getSize();
 		
@@ -227,29 +279,58 @@ public class PlayModel implements Model {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int[][] getRowClues() {
 		return Arrays.copyOf(rowClues, rowClues.length);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int[][] getColClues() {
 		return Arrays.copyOf(colClues, colClues.length);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	@Override
 	public int getSize() {
 		return cellStates.length;
 	}
 
+	/**
+	 * 
+	 * @param rowIdx
+	 * @param colIdx
+	 * @return
+	 */
 	@Override
 	public CellState getCellState(int rowIdx, int colIdx) {
 		return cellStates[rowIdx][colIdx];
 	}
 
+	/**
+	 * 
+	 * @param rowIdx
+	 * @param colIdx
+	 * @param state
+	 */
 	@Override
 	public void setCellState(int rowIdx, int colIdx, CellState state) {
 		cellStates[rowIdx][colIdx] = state;
 	}
 	
+	/**
+	 * 
+	 * @param line
+	 * @return
+	 */
 	private int[] extractClue(String line) {
 		if (line == null || line.isEmpty()) {
 			return new int[] {0};
@@ -265,10 +346,17 @@ public class PlayModel implements Model {
 		return result;
 	}
 	
+	/**
+	 * 
+	 */
 	public static void resetTime() {
 		startTime = System.currentTimeMillis();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public static long getTotalTime() {
 		return System.currentTimeMillis() - startTime;
 	}
