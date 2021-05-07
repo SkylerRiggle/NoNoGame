@@ -81,6 +81,9 @@ public class PlayView extends BorderPane implements View {
 		setTop(colCluesView);
 		setCenter(cellGrid);
 		setBottom(buttonBox);
+		
+		//Set the default style.
+		setState(false);
 	}
 	
 	/**

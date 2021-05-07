@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javafx.scene.control.Alert.AlertType;
 
 /**
+ * The play model contains all the game data for playing a puzzle.
  * 
  * @author Skyler Riggle
  * @version 1.0
@@ -27,33 +28,35 @@ public class PlayModel implements Model {
 	
 	
 	/**
-	 * 
+	 * This constructor creates a new random puzzle of small size for the player to
+	 * play.
 	 */
 	public PlayModel() {
 		Random random = new Random();
 		
-		int numRows = SMALL_SIZE;
-		int numCols = SMALL_SIZE;
+		int length = SMALL_SIZE;
 		
-		initializeArrays(numRows, numCols);
+		initializeArrays(length, length);
 		
-		CellState[][] solution = createRandomPuzzle(numRows, numCols, random);
-		decodeSolution(numRows, numCols, solution);
+		CellState[][] solution = createRandomPuzzle(length, length, random);
+		decodeSolution(length, length, solution);
 		
-		startTime = System.currentTimeMillis();
+		resetTime();
 	}
 
 	
 	/**
+	 * This method generates an array to represent the solution to a random puzzle.
 	 * 
-	 * @param numRows
-	 * @param numCols
-	 * @param random
-	 * @return
+	 * @param numRows The number of rows in the puzzle.
+	 * @param numCols The number of columns in the puzzle.
+	 * @param random The random to be used when generating values.
+	 * @return A two dimensional array of filled and empty cells.
 	 */
 	private CellState[][] createRandomPuzzle(int numRows, int numCols, Random random) {
 		CellState[][] solution = new CellState[numRows][numCols];
 		
+		//Generate a random state for each cell.
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
 				int randomUpper = random.nextInt(RANDOM_UPPER) + 1;
@@ -71,12 +74,14 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method initializes the clues for a given solution array.
 	 * 
-	 * @param numRows
-	 * @param numCols
-	 * @param solution
+	 * @param numRows The number of rows in the puzzle.
+	 * @param numCols The number of columns in the puzzle.
+	 * @param solution The solution array to be evaluated.
 	 */
 	private void decodeSolution(int numRows, int numCols, CellState[][] solution) {
+		//Get the row clues
 		for (int row = 0; row < numRows; row++) {
 			List<Integer> projection = project(solution[row]);
 			rowClues[row] = new int[projection.size()];
@@ -86,7 +91,8 @@ public class PlayModel implements Model {
 			}
 		}
 		
-		for (int col = 0; col < numRows; col++) {
+		//Get the column clues
+		for (int col = 0; col < numCols; col++) {
 			CellState[] clues = new CellState[numRows];
 			for (int row = 0; row < numRows; row++) {
 				clues[row] = solution[row][col];
@@ -102,8 +108,9 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This constructor loads a puzzle for the player to play from a given file.
 	 * 
-	 * @param filename
+	 * @param filename The puzzle file name.
 	 */
 	public PlayModel(String filename) {
 		File puzzleFile = new File(Main.getPuzzleLocation() + filename);
@@ -111,46 +118,42 @@ public class PlayModel implements Model {
 		try {
 			Scanner scanner = new Scanner(puzzleFile);
 			
-			int numRows;
-			int numCols;
+			//Set the size of the puzzle.
+			int length;
 			PuzzleSize size = PuzzleSize.valueOf(scanner.nextLine());
 			switch (size) {
 			case SMALL:
-				numRows = SMALL_SIZE;
-				numCols = SMALL_SIZE;
+				length = SMALL_SIZE;
 				break;
 			case MEDIUM:
-				numRows = MEDIUM_SIZE;
-				numCols = MEDIUM_SIZE;
+				length = MEDIUM_SIZE;
 				break;
 			case LARGE:
-				numRows = LARGE_SIZE;
-				numCols = LARGE_SIZE;
+				length = LARGE_SIZE;
 				break;
 			default:
-				numRows = SMALL_SIZE;
-				numCols = SMALL_SIZE;
+				length = SMALL_SIZE;
 				break;
 			}
 			
-			initializeArrays(numRows, numCols);
+			//Initialize the clue arrays.
+			initializeArrays(length, length);
 			
-			rowClues = new int[numRows][];
-			
-			for (int row = 0; row < numRows; row++) {
+			//Get each row clue.
+			for (int row = 0; row < length; row++) {
 				rowClues[row] = extractClue(scanner.nextLine().trim());
 			}
 			
-			colClues = new int[numCols][];
-			
-			for (int col = 0; col < numRows; col++) {
+			//Get each column clue.
+			for (int col = 0; col < length; col++) {
 				colClues[col] = extractClue(scanner.nextLine().trim());
 			}
 			
-			startTime = System.currentTimeMillis();
+			resetTime();
 			
 			scanner.close();
 		} catch (FileNotFoundException e) {
+			//Display an error if the file cannot be read.
 			String message = "ERROR: File cannot be read.";
 			ErrorAlert errorAlert = new ErrorAlert(AlertType.ERROR, message);
 			errorAlert.show();
@@ -158,14 +161,16 @@ public class PlayModel implements Model {
 	}
 
 	/**
+	 * This method initializes the clue arrays to a set size, and the cell state array to a certain size
+	 * as well as to empty.
 	 * 
-	 * @param numRows
-	 * @param numCols
+	 * @param numRows The number of rows in the puzzle.
+	 * @param numCols The number of columns in the puzzle.
 	 */
 	private void initializeArrays(int numRows, int numCols) {
 		cellStates = new CellState[numRows][numCols];
 		rowClues = new int[numRows][];
-		colClues = new int[numRows][];
+		colClues = new int[numCols][];
 		
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
@@ -175,14 +180,18 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method returns a projection for a given cell state array. A projection is an
+	 * array of integer values representing the clusters of filled values. For example,
+	 * the array [FILLED, FILLED, EMPTY, FILLED, EMPTY] would project to [2, 1].
 	 * 
-	 * @param states
-	 * @return
+	 * @param states The states to be projected.
+	 * @return The projection of a collection of cell states.
 	 */
 	public List<Integer> project(CellState[] states) {
 		List<Integer> result = new ArrayList<Integer>();
 		int sum = 0;
 		
+		//Count and add the chains of true values.
 		for (CellState state : states) {
 			if (state == CellState.FILLED) {
 				sum++;
@@ -192,6 +201,8 @@ public class PlayModel implements Model {
 			}
 		}
 		
+		//Handle the case where a cluster has yet to be added or
+		//no clusters were found.
 		if (result.size() == 0 || sum > 0) {
 			result.add(sum);
 		}
@@ -200,9 +211,10 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method returns the solved state of a row.
 	 * 
-	 * @param rowIdx
-	 * @return
+	 * @param rowIdx The row to be evaluated.
+	 * @return The solved state of the row.
 	 */
 	public boolean isRowSolved(int rowIdx) {
 		int i;
@@ -229,9 +241,10 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method returns the solved state of a column.
 	 * 
-	 * @param colIdx
-	 * @return
+	 * @param colIdx The column to be evaluated.
+	 * @return The solved state of the column.
 	 */
 	public boolean isColSolved(int colIdx) {
 		int i;
@@ -258,8 +271,9 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method returns the solved state of the puzzle.
 	 * 
-	 * @return
+	 * @return The solved state of the puzzle.
 	 */
 	public boolean isSolved() {
 		int size = getSize();
@@ -280,24 +294,28 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method returns the array of row clues.
 	 * 
-	 * @return
+	 * @return The row clues.
 	 */
 	public int[][] getRowClues() {
 		return Arrays.copyOf(rowClues, rowClues.length);
 	}
 	
 	/**
+	 * This method returns the array of column clues.
 	 * 
-	 * @return
+	 * @return The column clues.
 	 */
 	public int[][] getColClues() {
 		return Arrays.copyOf(colClues, colClues.length);
 	}
 	
 	/**
+	 * This method returns the size of the puzzle, which is equal to both the number
+	 * of rows and columns.
 	 * 
-	 * @return
+	 * @return The size of the puzzle.
 	 */
 	@Override
 	public int getSize() {
@@ -305,10 +323,11 @@ public class PlayModel implements Model {
 	}
 
 	/**
+	 * This method returns the current state of a given cell.
 	 * 
-	 * @param rowIdx
-	 * @param colIdx
-	 * @return
+	 * @param rowIdx The row the cell is in.
+	 * @param colIdx The column the cell is in.
+	 * @return The current state of the cell.
 	 */
 	@Override
 	public CellState getCellState(int rowIdx, int colIdx) {
@@ -316,10 +335,11 @@ public class PlayModel implements Model {
 	}
 
 	/**
+	 * This method sets the state of a given cell.
 	 * 
-	 * @param rowIdx
-	 * @param colIdx
-	 * @param state
+	 * @param rowIdx The row the cell is in.
+	 * @param colIdx The column the cell is in.
+	 * @param state The desired new state of the cell.
 	 */
 	@Override
 	public void setCellState(int rowIdx, int colIdx, CellState state) {
@@ -327,18 +347,21 @@ public class PlayModel implements Model {
 	}
 	
 	/**
+	 * This method extracts a clue array from a string.
 	 * 
-	 * @param line
-	 * @return
+	 * @param line The string containing the clue values.
+	 * @return A clue array from a string.
 	 */
 	private int[] extractClue(String line) {
 		if (line == null || line.isEmpty()) {
 			return new int[] {0};
 		}
 		
+		//Split the string into pieces.
 		String[] nums = line.split(" ");
 		int[] result = new int[nums.length];
 		
+		//Add the integer values in the string to an array.
 		for (int i = 0; i < nums.length; i++) {
 			result[i] = Integer.parseInt(nums[i]);
 		}
@@ -347,15 +370,15 @@ public class PlayModel implements Model {
 	}
 	
 	/**
-	 * 
+	 * This method resets the start time of the puzzle.
 	 */
 	public static void resetTime() {
 		startTime = System.currentTimeMillis();
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * This method returns the difference between the start time and the current time.
+	 * @return The difference between the start time and the current time.
 	 */
 	public static long getTotalTime() {
 		return System.currentTimeMillis() - startTime;
