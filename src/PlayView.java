@@ -83,7 +83,7 @@ public class PlayView extends BorderPane implements View {
 		setBottom(buttonBox);
 		
 		//Set the default style.
-		setState(false);
+		getStyleClass().add(MODEL_STYLE);
 	}
 	
 	/**
@@ -106,25 +106,6 @@ public class PlayView extends BorderPane implements View {
 	@Override
 	public void setCellState(int rowIdx, int colIdx, CellState state) {
 		cellGrid.updateCell(rowIdx, colIdx, state);
-	}
-	
-	/**
-	 * This method updates the look of the puzzle based on its solved state.
-	 * 
-	 * @param isSolved The solved state of the puzzle.
-	 */
-	public void setState(boolean isSolved) {
-		ObservableList<String> styleClasses = getStyleClass();
-		
-		//Remove the current style class.
-		styleClasses.removeAll(MODEL_STYLE, SOLVED_STYLE);
-		
-		//Add the appropriate style class.
-		if (isSolved) {
-			styleClasses.add(SOLVED_STYLE);
-		} else {
-			styleClasses.add(MODEL_STYLE);
-		}
 	}
 	
 	/**
@@ -155,7 +136,7 @@ public class PlayView extends BorderPane implements View {
 	 */
 	public void setPuzzleState(boolean solved) {
 		ObservableList<String> styleClasses = getStyleClass();
-		
+
 		if (solved) {
 			styleClasses.add(SOLVED_STYLE);
 			displayWin();

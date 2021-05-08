@@ -118,12 +118,12 @@ public class PlayPresenter implements Presenter {
 					}
 				}
 			}
+			
+			//Update the clue and puzzle solved states.
+			view.setRowClueState(rowIdx, model.isRowSolved(rowIdx));
+			view.setColClueState(colIdx, model.isColSolved(colIdx));
+			view.setPuzzleState(isSolved);
 		}
-
-		//Update the clue and puzzle solved states.
-		view.setRowClueState(rowIdx, model.isRowSolved(rowIdx));
-		view.setColClueState(colIdx, model.isColSolved(colIdx));
-		view.setPuzzleState(isSolved);
 	}
 	
 	/**

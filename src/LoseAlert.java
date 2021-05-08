@@ -58,6 +58,7 @@ public class LoseAlert extends Alert {
 			@Override
 			public void handle(ActionEvent arg0) {
 				Main.setScene(new PlayOptions(main));
+				PlayView.resetPlay();
 			}
 		});
 		
