@@ -1,5 +1,7 @@
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,8 +57,14 @@ public class PlayOptions extends BorderPane {
 			ObservableList<String> puzzleTitles = FXCollections.observableArrayList(puzzles);
 			
 			//Get the pure titles for the puzzles
-			for (int i = 0; i < puzzleTitles.size(); i++) {
+			int i;
+			for (i = 0; i < puzzleTitles.size(); i++) {
 				puzzleTitles.set(i, puzzleTitles.get(i).replaceAll(Main.getPuzzleFileType(), ""));
+			}
+			
+			//Display puzzle sizes
+			for (i = 0; i < puzzleTitles.size(); i++) {
+				puzzleTitles.set(i, puzzleTitles.get(i) + getSize(i));
 			}
 			
 			puzzleList.setItems(puzzleTitles);
@@ -139,6 +147,30 @@ public class PlayOptions extends BorderPane {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * This method gathers the size of the puzzle to be displayed with the puzzle title.
+	 * 
+	 * @param index The index of the puzzle to be read.
+	 * @return The size of the puzzle.
+	 */
+	private String getSize(int index) {
+		File tempFile = new File(Main.getPuzzleLocation() + puzzles.get(index));
+		
+		try {
+			Scanner scanner = new Scanner(tempFile);
+			
+			String size = scanner.nextLine();
+			
+			scanner.close();
+			
+			return " - " + size;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 
 	/**
