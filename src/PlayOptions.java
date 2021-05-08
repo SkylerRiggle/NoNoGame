@@ -32,6 +32,7 @@ public class PlayOptions extends BorderPane {
 	
 	private static Label puzzleListLabel = new Label("Puzzles:");
 	private static ComboBox<String> puzzleList = new ComboBox<String>();
+	private static ObservableList<String> puzzles;
 	
 	private static Button playButton = new Button("Play");
 	private static Button randomPuzzleButton = new Button("Play Random Puzzle");
@@ -47,19 +48,26 @@ public class PlayOptions extends BorderPane {
 		super();
 
 		//Get the puzzle files.
-		ObservableList<String> puzzleFiles = getPuzzleFiles(Main.getPuzzleLocation());
-		puzzleList.setItems(puzzleFiles);
+		puzzles = getPuzzleFiles(Main.getPuzzleLocation());
 		
-		//Set the default value of the list to its first value.
-		if (puzzleFiles.size() > 0) {
-			puzzleList.setValue(puzzleFiles.get(0));
+		//Set the default values of the list.
+		if (puzzles.size() > 0) {
+			ObservableList<String> puzzleTitles = FXCollections.observableArrayList(puzzles);
+			
+			//Get the pure titles for the puzzles
+			for (int i = 0; i < puzzleTitles.size(); i++) {
+				puzzleTitles.set(i, puzzleTitles.get(i).replaceAll(Main.getPuzzleFileType(), ""));
+			}
+			
+			puzzleList.setItems(puzzleTitles);
+			puzzleList.setValue(puzzleTitles.get(0));
 		}
 		
 		//The play button loads the selected puzzle into the game.
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				PlayModel playModel = new PlayModel(puzzleList.getValue());
+				PlayModel playModel = new PlayModel(puzzles.get(puzzleList.getItems().indexOf(puzzleList.getValue())));
 				
 				startPlayer(playModel, main);
 			}
