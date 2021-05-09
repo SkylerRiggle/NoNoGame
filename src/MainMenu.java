@@ -97,14 +97,15 @@ public class MainMenu extends BorderPane {
 		
 		//Bottom bar containing the create label.
 		HBox bottomBar = new HBox(creatorLabel);
-		bottomBar.setAlignment(Pos.BOTTOM_LEFT);
+		bottomBar.setAlignment(Pos.BOTTOM_RIGHT);
 		bottomBar.getStyleClass().add(PADDING_STYLE);
 		
 		//Get the main menu logo and animate it to tilt back and forth.
 		ImageView menuLogoImage = new ImageView(menuLogo);
 		RotateTransition logoRotation = new RotateTransition();
+		logoRotation.setFromAngle(10);
 		logoRotation.setDuration(Duration.millis(1000));
-		logoRotation.setByAngle(-15);
+		logoRotation.setByAngle(-20);
 		logoRotation.setCycleCount((int) Double.POSITIVE_INFINITY);
 		logoRotation.setNode(menuLogoImage);
 		logoRotation.setAutoReverse(true);

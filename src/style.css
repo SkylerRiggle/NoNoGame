@@ -81,14 +81,22 @@
 	-fx-border-width: 6;
 	-fx-border-color: hover-color;
 	-fx-border-radius: 6;
+	
+	-fx-effect: dropshadow(gaussian, border-color, 10, 0, 1, 1);
 }
 
 .button:hover {
 	-fx-border-color: marked-color;
+	
+	-fx-effect: dropshadow(gaussian, border-color, 10, 0, 5, 5);
+}
+
+.image-view {
+	-fx-effect: dropshadow(gaussian, border-color, 10, 0, 8, 8);
 }
 
 .label {
-	-fx-font: 12px "Monospace";
+	-fx-font: 16px "Monospace";
 	-fx-font-weight: bold;
 	-fx-text-fill: border-color;
 }
@@ -98,6 +106,12 @@
 	-fx-font-weight: bold;
 	
 	-fx-background-color: filled-color;
+	
+	-fx-effect: dropshadow(gaussian, border-color, 10, 0, 0, 0);
+}
+
+.combo-box .arrow {
+	-fx-background-color: hover-color;
 }
 
 .combo-box .list-cell {
@@ -112,34 +126,35 @@
 
 /*Game Menus ------------------------------------------------------------------------------------------------------------------------------- */
 MainMenu {
-	-fx-background-color: empty-color;
+	-fx-background-color: radial-gradient(focus-distance 0% , center 33% 50% , radius 75% , empty-color, unsolved-background-color);
 }
 
 PlayOptions {
-	-fx-background-color: empty-color;
+	-fx-background-color: radial-gradient(focus-distance 0% , center 50% 50% , radius 75% , empty-color, unsolved-background-color);
 }
 
 CreateOptions {
-	-fx-background-color: empty-color;
+	-fx-background-color: radial-gradient(focus-distance 0% , center 50% 50% , radius 75% , empty-color, unsolved-background-color);
 }
 
 SaveBox {
-	-fx-background-color: empty-color;
+	-fx-background-color: unsolved-background-color;
 }
 
 HBox {
-	-fx-background-color: empty-color;
+	-fx-background-color: unsolved-background-color;
 }
 
 .HBox-filled {
 	-fx-background-color: filled-color;
+	-fx-effect: dropshadow(gaussian, border-color, 10, 0, 0, 0);
 }
 
 
 /*Cell View ------------------------------------------------------------------------------------------------------------------------------- */
 .cell-grid-view {
   -fx-border-color: border-color;
-  -fx-border-width: 1 0 0 1;
+  -fx-border-width: 2 2 2 2;
 }
 
 .cell-view > Rectangle {
@@ -175,6 +190,8 @@ HBox {
 
 .cell-view-marked > Line {
   visibility: visible;
+  
+  -fx-effect: dropshadow(gaussian, border-color, 2, 0, 0, 0);
 }
 
 
